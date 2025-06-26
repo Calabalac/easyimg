@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Дополнительные стили для глассморфизма */
+.glass-card {
+  @apply bg-base-100/10 backdrop-blur-xl border border-base-content/10;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
+  z-index: -1;
+}
+
+/* Пульсирующая анимация для иконок */
+.pulse-glow {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    opacity: 1; 
+    text-shadow: 0 0 10px currentColor;
+  }
+  50% { 
+    opacity: 0.7; 
+    text-shadow: 0 0 20px currentColor;
+  }
+}
+
+/* Hover эффекты */
+.hover-lift {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Градиентные фоны */
+.bg-gradient-dark {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+}
+
+.bg-gradient-mesh {
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+
+/* Анимированная сетка */
+.animated-grid {
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  animation: grid-move 20s linear infinite;
+}
+
+@keyframes grid-move {
+  0% { background-position: 0 0; }
+  100% { background-position: 20px 20px; }
+}
+
+/* Светящиеся границы */
+.border-glow {
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  box-shadow: 
+    0 0 10px rgba(59, 130, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Статус бейджи */
+.status-success {
+  @apply bg-success/20 text-success border border-success/30;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+.status-error {
+  @apply bg-error/20 text-error border border-error/30;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.status-warning {
+  @apply bg-warning/20 text-warning border border-warning/30;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+
+.status-info {
+  @apply bg-info/20 text-info border border-info/30;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.3);
+} 

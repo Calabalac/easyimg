@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Кастомные стили для EasyImg */
+@layer base {
+  body {
+    @apply bg-base-100 text-base-content;
+  }
+}
+
+@layer components {
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary to-secondary text-white;
+  }
+  
+  .card-glass {
+    @apply backdrop-blur-sm bg-white/80 border border-white/20;
+  }
+  
+  .navbar-glass {
+    @apply backdrop-blur-md bg-white/90 border-b border-white/20;
+  }
+}
+
+@layer utilities {
+  .floating-circles {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .floating-circles::before, .floating-circles::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(32px);
+    opacity: 0.25;
+    animation: float-circles 16s infinite linear alternate;
+  }
+  .floating-circles::before {
+    width: 420px;
+    height: 420px;
+    left: 10vw;
+    top: 10vh;
+    background: radial-gradient(circle at 30% 30%, #3b82f6 0%, #23272f 100%);
+    animation-delay: 0s;
+  }
+  .floating-circles::after {
+    width: 320px;
+    height: 320px;
+    right: 8vw;
+    bottom: 12vh;
+    background: radial-gradient(circle at 70% 70%, #38bdf8 0%, #181a20 100%);
+    animation-delay: 8s;
+  }
+  @keyframes float-circles {
+    0% {
+      transform: scale(1) translateY(0px) translateX(0px);
+      opacity: 0.22;
+    }
+    50% {
+      transform: scale(1.15) translateY(-40px) translateX(30px);
+      opacity: 0.32;
+    }
+    100% {
+      transform: scale(0.95) translateY(30px) translateX(-20px);
+      opacity: 0.18;
+    }
+  }
+} 

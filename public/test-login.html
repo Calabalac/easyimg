@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тест входа</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 100%; padding: 8px; margin-bottom: 10px; }
+        button { padding: 10px 20px; background: #007cba; color: white; border: none; cursor: pointer; }
+        .result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <h1>Тест системы входа</h1>
+    
+    <form id="loginForm">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" value="webworker37@gmail.com" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="password">Пароль:</label>
+            <input type="password" id="password" value="SuperAdmin123!" required>
+        </div>
+        
+        <button type="submit">Войти</button>
+    </form>
+    
+    <div id="result" class="result" style="display: none;"></div>
+    
+    <div style="margin-top: 30px;">
+        <h3>Тесты:</h3>
+        <button onclick="testProtectedRoute()">Тест защищённого маршрута</button>
+        <button onclick="testSuperAdmin()">Тест панели суперадмина</button>
+        <button onclick="logout()">Выйти</button>
+    </div>
+
+    <script>
+        const resultDiv = document.getElementById('result');
+
+        function showResult(message, isError = false) {
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = isError ? '#ffebee' : '#e8f5e8';
+            resultDiv.style.borderColor = isError ? '#f44336' : '#4caf50';
+            resultDiv.innerHTML = message;
+        }
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include', // Важно для cookie
+                    body: JSON.stringify({ email, password }),
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult(`✅ Успешный вход!<br>
+                               Пользователь: ${result.user.email}<br>
+                               Роль: ${result.user.role}<br>
+                               Перенаправление: ${result.redirectUrl}`);
+                } else {
+                    showResult(`❌ Ошибка входа: ${result.message}`, true);
+                }
+            } catch (error) {
+                showResult(`❌ Ошибка соединения: ${error.message}`, true);
+            }
+        });
+
+        async function testProtectedRoute() {
+            try {
+                const response = await fetch('/admin', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    showResult('✅ Доступ к админке получен!');
+                } else {
+                    showResult(`❌ Доступ к админке запрещён: ${response.status}`, true);
+                }
+            } catch (error) {
+                showResult(`❌ Ошибка при тесте админки: ${error.message}`, true);
+            }
+        }
+
+        async function testSuperAdmin() {
+            try {
+                const response = await fetch('/superadmin', {
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    showResult('✅ Доступ к панели суперадмина получен!');
+                } else {
+                    showResult(`❌ Доступ к панели суперадмина запрещён: ${response.status}`, true);
+                }
+            } catch (error) {
+                showResult(`❌ Ошибка при тесте суперадмина: ${error.message}`, true);
+            }
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('/auth/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                
+                const result = await response.json();
+                if (result.success) {
+                    showResult('✅ Выход выполнен успешно!');
+                }
+            } catch (error) {
+                showResult(`❌ Ошибка при выходе: ${error.message}`, true);
+            }
+        }
+    </script>
+</body>
+</html> 
